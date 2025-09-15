@@ -1,4 +1,4 @@
-defmodule TrieAgain.BenchmarkTest do
+defmodule TrieHard.BenchmarkTest do
   use ExUnit.Case
 
   @moduletag :benchmark
@@ -6,7 +6,7 @@ defmodule TrieAgain.BenchmarkTest do
   describe "performance benchmarks" do
     @tag timeout: :infinity
     test "benchmark insert operations" do
-      trie = TrieAgain.new()
+      trie = TrieHard.new()
 
       # Benchmark inserting 10,000 words
       word_count = 10_000
@@ -14,28 +14,28 @@ defmodule TrieAgain.BenchmarkTest do
 
       {insert_time, _} = :timer.tc(fn ->
         Enum.each(words, fn word ->
-          TrieAgain.insert(trie, word, "value_#{word}")
+          TrieHard.insert(trie, word, "value_#{word}")
         end)
       end)
 
       # Benchmark batch insert
       {batch_time, _} = :timer.tc(fn ->
-        trie2 = TrieAgain.new()
-        TrieAgain.add_word_list(trie2, words)
+        trie2 = TrieHard.new()
+        TrieHard.add_word_list(trie2, words)
       end)
 
       # Benchmark autocomplete
       {autocomplete_time, results} = :timer.tc(fn ->
-        TrieAgain.auto_complete(trie, "word_", 100)
+        TrieHard.auto_complete(trie, "word_", 100)
       end)
 
       # Benchmark lookup
       test_word = Enum.random(words)
       {lookup_time, _} = :timer.tc(fn ->
-        TrieAgain.get(trie, test_word)
+        TrieHard.get(trie, test_word)
       end)
 
-      IO.puts("\n=== TrieAgain Performance Benchmarks ===")
+      IO.puts("\n=== TrieHard Performance Benchmarks ===")
       IO.puts("Words inserted: #{word_count}")
       IO.puts("Individual insert time: #{insert_time/1000} ms (#{insert_time/word_count} μs per word)")
       IO.puts("Batch insert time: #{batch_time/1000} ms (#{batch_time/word_count} μs per word)")
@@ -52,7 +52,7 @@ defmodule TrieAgain.BenchmarkTest do
 
     @tag timeout: :infinity
     test "memory efficiency with shared prefixes" do
-      trie = TrieAgain.new()
+      trie = TrieHard.new()
 
       # Insert many words with shared prefixes
       prefixes = ["application", "appreciate", "approach", "appropriate"]
@@ -61,17 +61,17 @@ defmodule TrieAgain.BenchmarkTest do
                   do: "#{prefix}_#{suffix}"
 
       {time, _} = :timer.tc(fn ->
-        TrieAgain.add_word_list(trie, words)
+        TrieHard.add_word_list(trie, words)
       end)
 
       # Test prefix search performance
       {prefix_time, {_, found}} = :timer.tc(fn ->
-        TrieAgain.prefix_search(trie, "app")
+        TrieHard.prefix_search(trie, "app")
       end)
 
       # Test autocomplete performance
       {complete_time, {_, results}} = :timer.tc(fn ->
-        TrieAgain.auto_complete(trie, "application", 50)
+        TrieHard.auto_complete(trie, "application", 50)
       end)
 
       IO.puts("\n=== Memory Efficiency Test ===")

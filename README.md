@@ -1,4 +1,4 @@
-# TrieAgain
+# TrieHard
 
 A blazing fast, memory-efficient Trie (prefix tree) implementation for Elixir with autocomplete support, powered by the high-performance `trie_hard_rs` Rust library via Rustler.
 
@@ -22,12 +22,12 @@ Based on benchmarks with 10,000 words:
 
 ## Installation
 
-Add `trie_again` to your list of dependencies in `mix.exs`:
+Add `trie_hard` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:trie_again, "~> 0.1.0"}
+    {:trie_hard, "~> 0.1.0"}
   ]
 end
 ```
@@ -41,31 +41,31 @@ end
 
 ```elixir
 # Create a new trie
-trie = TrieAgain.new()
+trie = TrieHard.new()
 
 # Insert key-value pairs
-TrieAgain.insert(trie, "cat", "feline")
-TrieAgain.insert(trie, "car", "vehicle")
-TrieAgain.insert(trie, "card", "payment")
+TrieHard.insert(trie, "cat", "feline")
+TrieHard.insert(trie, "car", "vehicle")
+TrieHard.insert(trie, "card", "payment")
 
 # Lookup values
-{:ok, "feline"} = TrieAgain.get(trie, "cat")
-{:not_found, nil} = TrieAgain.get(trie, "dog")
+{:ok, "feline"} = TrieHard.get(trie, "cat")
+{:not_found, nil} = TrieHard.get(trie, "dog")
 
 # Autocomplete
-{:ok, suggestions} = TrieAgain.auto_complete(trie, "ca", 10)
+{:ok, suggestions} = TrieHard.auto_complete(trie, "ca", 10)
 # Returns: ["car", "card", "cat"] (order may vary)
 
 # Prefix search
-{:ok, true} = TrieAgain.prefix_search(trie, "ca")
-{:ok, false} = TrieAgain.prefix_search(trie, "xyz")
+{:ok, true} = TrieHard.prefix_search(trie, "ca")
+{:ok, false} = TrieHard.prefix_search(trie, "xyz")
 
 # Count words with prefix
-{:ok, 3} = TrieAgain.count_prefix(trie, "ca")
+{:ok, 3} = TrieHard.count_prefix(trie, "ca")
 
 # Batch operations
 words = ["apple", "application", "apply"]
-:ok = TrieAgain.add_word_list(trie, words)
+:ok = TrieHard.add_word_list(trie, words)
 ```
 
 ## API Reference
@@ -92,39 +92,39 @@ words = ["apple", "application", "apply"]
 ### Unicode Support
 
 ```elixir
-trie = TrieAgain.new()
+trie = TrieHard.new()
 
-TrieAgain.insert(trie, "café", "coffee")
-TrieAgain.insert(trie, "🦀", "crab emoji")
-TrieAgain.insert(trie, "こんにちは", "hello in Japanese")
+TrieHard.insert(trie, "café", "coffee")
+TrieHard.insert(trie, "🦀", "crab emoji")
+TrieHard.insert(trie, "こんにちは", "hello in Japanese")
 
-{:ok, "coffee"} = TrieAgain.get(trie, "café")
-{:ok, results} = TrieAgain.auto_complete(trie, "caf", 5)
+{:ok, "coffee"} = TrieHard.get(trie, "café")
+{:ok, results} = TrieHard.auto_complete(trie, "caf", 5)
 ```
 
 ### Large Datasets
 
 ```elixir
-trie = TrieAgain.new()
+trie = TrieHard.new()
 
 # Efficient batch insertion
 words = for i <- 1..10_000, do: "word_#{i}"
-TrieAgain.add_word_list(trie, words)
+TrieHard.add_word_list(trie, words)
 
 # Fast autocomplete even with large datasets
-{:ok, suggestions} = TrieAgain.auto_complete(trie, "word_", 20)
+{:ok, suggestions} = TrieHard.auto_complete(trie, "word_", 20)
 ```
 
 ### Concurrent Access
 
 ```elixir
-trie = TrieAgain.new()
+trie = TrieHard.new()
 
 # Multiple processes can safely access the same trie
 tasks = for i <- 1..100 do
   Task.async(fn ->
-    TrieAgain.insert(trie, "process_#{i}", "data_#{i}")
-    TrieAgain.get(trie, "process_#{i}")
+    TrieHard.insert(trie, "process_#{i}", "data_#{i}")
+    TrieHard.get(trie, "process_#{i}")
   end)
 end
 
@@ -161,12 +161,12 @@ mix test
 mix test --include benchmark
 
 # Run example
-elixir -r lib/trie_again.ex -r lib/trie_again/native.ex examples/usage_example.exs
+elixir -r lib/trie_hard.ex -r lib/trie_hard/native.ex examples/usage_example.exs
 ```
 
 ## Architecture
 
-TrieAgain uses Rustler to bridge Elixir with the high-performance `trie_hard_rs` Rust library:
+TrieHard uses Rustler to bridge Elixir with the high-performance `trie_hard_rs` Rust library:
 
 - **Elixir Layer**: Provides idiomatic Elixir API and documentation
 - **Rustler Bridge**: Manages memory-safe resource handling and type conversion

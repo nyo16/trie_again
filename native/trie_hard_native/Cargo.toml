@@ -1,0 +1,12 @@
+[package]
+name = "trie_hard_native"
+version = "0.1.0"
+authors = []
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.37.0"
+trie_hard_rs = "0.1.0"

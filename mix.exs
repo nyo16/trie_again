@@ -1,12 +1,12 @@
-defmodule TrieAgain.MixProject do
+defmodule TrieHard.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
-  @source_url "https://github.com/nyo16/trie_again"
+  @version "0.2.0"
+  @source_url "https://github.com/nyo16/trie_hard"
 
   def project do
     [
-      app: :trie_again,
+      app: :trie_hard,
       version: @version,
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
@@ -14,7 +14,7 @@ defmodule TrieAgain.MixProject do
       description: description(),
       package: package(),
       docs: docs(),
-      name: "TrieAgain",
+      name: "TrieHard",
       source_url: @source_url
     ]
   end
@@ -41,7 +41,7 @@ defmodule TrieAgain.MixProject do
 
   defp package do
     [
-      name: "trie_again",
+      name: "trie_hard",
       files: ~w(lib native .formatter.exs mix.exs README.md LICENSE CHANGELOG.md),
       licenses: ["Apache-2.0"],
       links: %{
@@ -54,7 +54,7 @@ defmodule TrieAgain.MixProject do
 
   defp docs do
     [
-      main: "TrieAgain",
+      main: "TrieHard",
       source_ref: "v#{@version}",
       source_url: @source_url,
       extras: ["README.md"]
