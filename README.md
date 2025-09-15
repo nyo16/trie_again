@@ -27,10 +27,12 @@ Add `trie_hard` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:trie_hard, "~> 0.1.0"}
+    {:trie_hard, "~> 0.2.0"}
   ]
 end
 ```
+
+Documentation can be found at [https://hexdocs.pm/trie_hard](https://hexdocs.pm/trie_hard).
 
 ## Requirements
 
