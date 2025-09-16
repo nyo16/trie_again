@@ -27,7 +27,8 @@ defmodule TrieHard.MixProject do
 
   defp deps do
     [
-      {:rustler, "~> 0.37.1", runtime: false},
+      {:rustler, ">= 0.0.0", optional: true},
+      {:rustler_precompiled, "~> 0.8.0"},
       {:ex_doc, "~> 0.34", only: :dev, runtime: false}
     ]
   end
@@ -42,7 +43,7 @@ defmodule TrieHard.MixProject do
   defp package do
     [
       name: "trie_hard",
-      files: ~w(lib native .formatter.exs mix.exs README.md LICENSE CHANGELOG.md),
+      files: ~w(lib .formatter.exs mix.exs README.md LICENSE CHANGELOG.md checksum-*.exs),
       licenses: ["Apache-2.0"],
       links: %{
         "GitHub" => @source_url,
