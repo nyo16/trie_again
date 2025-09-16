@@ -1,4 +1,4 @@
-use rustler::{Atom, Env, ResourceArc, Term};
+use rustler::{Atom, Env, Resource, ResourceArc, Term};
 use std::sync::Mutex;
 use trie_hard_rs::Trie;
 
@@ -22,6 +22,9 @@ impl TrieResource {
         }
     }
 }
+
+// Declare the resource
+impl Resource for TrieResource {}
 
 #[rustler::nif]
 fn new_trie() -> ResourceArc<TrieResource> {
@@ -96,9 +99,8 @@ fn add_word_list(trie_resource: ResourceArc<TrieResource>, words: Vec<String>) -
     }
 }
 
-fn load(env: Env, _info: Term) -> bool {
-    let _ = rustler::resource!(TrieResource, env);
+fn load(_env: Env, _info: Term) -> bool {
     true
 }
 
-rustler::init!("Elixir.TrieHard.Native", load = load);
+rustler::init!("Elixir.TrieHard.Native", load = load, resources = [TrieResource]);
