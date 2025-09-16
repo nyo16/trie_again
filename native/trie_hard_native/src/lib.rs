@@ -28,6 +28,7 @@ fn new_trie() -> ResourceArc<TrieResource> {
     ResourceArc::new(TrieResource::new())
 }
 
+
 #[rustler::nif]
 fn insert(trie_resource: ResourceArc<TrieResource>, key: String, value: String) -> Atom {
     match trie_resource.trie.lock() {
