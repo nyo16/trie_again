@@ -103,4 +103,8 @@ fn load(_env: Env, _info: Term) -> bool {
     true
 }
 
-rustler::init!("Elixir.TrieHard.Native", load = load, resources = [TrieResource]);
+rustler::init!(
+    "Elixir.TrieHard.Native",
+    load = load,
+    resources = [TrieResource]
+);
