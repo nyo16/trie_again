@@ -1,6 +1,6 @@
 use rustler::{Atom, Env, ResourceArc, Term};
-use trie_hard_rs::Trie;
 use std::sync::Mutex;
+use trie_hard_rs::Trie;
 
 mod atoms {
     rustler::atoms! {
@@ -28,7 +28,6 @@ fn new_trie() -> ResourceArc<TrieResource> {
     ResourceArc::new(TrieResource::new())
 }
 
-
 #[rustler::nif]
 fn insert(trie_resource: ResourceArc<TrieResource>, key: String, value: String) -> Atom {
     match trie_resource.trie.lock() {
@@ -36,20 +35,18 @@ fn insert(trie_resource: ResourceArc<TrieResource>, key: String, value: String) 
             trie.insert(&key, &value);
             atoms::ok()
         }
-        Err(_) => atoms::error()
+        Err(_) => atoms::error(),
     }
 }
 
 #[rustler::nif]
 fn get(trie_resource: ResourceArc<TrieResource>, key: String) -> (Atom, Option<String>) {
     match trie_resource.trie.lock() {
-        Ok(trie) => {
-            match trie.get(&key) {
-                Some(value) => (atoms::ok(), Some(value.clone())),
-                None => (atoms::not_found(), None)
-            }
-        }
-        Err(_) => (atoms::error(), None)
+        Ok(trie) => match trie.get(&key) {
+            Some(value) => (atoms::ok(), Some(value.clone())),
+            None => (atoms::not_found(), None),
+        },
+        Err(_) => (atoms::error(), None),
     }
 }
 
@@ -60,7 +57,7 @@ fn delete(trie_resource: ResourceArc<TrieResource>, key: String) -> Atom {
             trie.delete(&key);
             atoms::ok()
         }
-        Err(_) => atoms::error()
+        Err(_) => atoms::error(),
     }
 }
 
@@ -68,18 +65,22 @@ fn delete(trie_resource: ResourceArc<TrieResource>, key: String) -> Atom {
 fn prefix_search(trie_resource: ResourceArc<TrieResource>, prefix: String) -> (Atom, bool) {
     match trie_resource.trie.lock() {
         Ok(trie) => (atoms::ok(), trie.prefix_search(&prefix)),
-        Err(_) => (atoms::error(), false)
+        Err(_) => (atoms::error(), false),
     }
 }
 
 #[rustler::nif]
-fn auto_complete(trie_resource: ResourceArc<TrieResource>, prefix: String, max_results: usize) -> (Atom, Vec<String>) {
+fn auto_complete(
+    trie_resource: ResourceArc<TrieResource>,
+    prefix: String,
+    max_results: usize,
+) -> (Atom, Vec<String>) {
     match trie_resource.trie.lock() {
         Ok(trie) => {
             let results = trie.auto_complete(&prefix, max_results);
             (atoms::ok(), results)
         }
-        Err(_) => (atoms::error(), Vec::new())
+        Err(_) => (atoms::error(), Vec::new()),
     }
 }
 
@@ -91,7 +92,7 @@ fn add_word_list(trie_resource: ResourceArc<TrieResource>, words: Vec<String>) -
             trie.add_word_list(&word_refs, |word| word.to_string());
             atoms::ok()
         }
-        Err(_) => atoms::error()
+        Err(_) => atoms::error(),
     }
 }
 
