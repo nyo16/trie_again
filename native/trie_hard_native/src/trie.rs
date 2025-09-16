@@ -91,12 +91,11 @@ impl<T: Clone> Trie<T> {
         }
 
         let mut results = Vec::new();
-        self.collect_words(current, prefix.to_string(), &mut results, max_results);
+        Trie::collect_words(current, prefix.to_string(), &mut results, max_results);
         results
     }
 
     fn collect_words(
-        &self,
         node: &TrieNode<T>,
         prefix: String,
         results: &mut Vec<String>,
@@ -116,7 +115,7 @@ impl<T: Clone> Trie<T> {
             }
             let mut new_prefix = prefix.clone();
             new_prefix.push(*ch);
-            self.collect_words(child, new_prefix, results, max_results);
+            Trie::collect_words(child, new_prefix, results, max_results);
         }
     }
 
