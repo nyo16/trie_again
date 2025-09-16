@@ -169,7 +169,8 @@ defmodule TrieHard do
       true
   """
   @spec auto_complete(trie(), String.t(), non_neg_integer()) :: {:ok, [String.t()]} | {:error, []}
-  def auto_complete(trie, prefix, max_results \\ 10) when is_binary(prefix) and is_integer(max_results) do
+  def auto_complete(trie, prefix, max_results \\ 10)
+      when is_binary(prefix) and is_integer(max_results) do
     Native.auto_complete(trie, prefix, max_results)
   end
 

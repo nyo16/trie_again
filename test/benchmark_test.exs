@@ -12,33 +12,45 @@ defmodule TrieHard.BenchmarkTest do
       word_count = 10_000
       words = for i <- 1..word_count, do: "word_#{:rand.uniform(1_000_000)}_#{i}"
 
-      {insert_time, _} = :timer.tc(fn ->
-        Enum.each(words, fn word ->
-          TrieHard.insert(trie, word, "value_#{word}")
+      {insert_time, _} =
+        :timer.tc(fn ->
+          Enum.each(words, fn word ->
+            TrieHard.insert(trie, word, "value_#{word}")
+          end)
         end)
-      end)
 
       # Benchmark batch insert
-      {batch_time, _} = :timer.tc(fn ->
-        trie2 = TrieHard.new()
-        TrieHard.add_word_list(trie2, words)
-      end)
+      {batch_time, _} =
+        :timer.tc(fn ->
+          trie2 = TrieHard.new()
+          TrieHard.add_word_list(trie2, words)
+        end)
 
       # Benchmark autocomplete
-      {autocomplete_time, results} = :timer.tc(fn ->
-        TrieHard.auto_complete(trie, "word_", 100)
-      end)
+      {autocomplete_time, results} =
+        :timer.tc(fn ->
+          TrieHard.auto_complete(trie, "word_", 100)
+        end)
 
       # Benchmark lookup
       test_word = Enum.random(words)
-      {lookup_time, _} = :timer.tc(fn ->
-        TrieHard.get(trie, test_word)
-      end)
+
+      {lookup_time, _} =
+        :timer.tc(fn ->
+          TrieHard.get(trie, test_word)
+        end)
 
       IO.puts("\n=== TrieHard Performance Benchmarks ===")
       IO.puts("Words inserted: #{word_count}")
-      IO.puts("Individual insert time: #{insert_time/1000} ms (#{insert_time/word_count} μs per word)")
-      IO.puts("Batch insert time: #{batch_time/1000} ms (#{batch_time/word_count} μs per word)")
+
+      IO.puts(
+        "Individual insert time: #{insert_time / 1000} ms (#{insert_time / word_count} μs per word)"
+      )
+
+      IO.puts(
+        "Batch insert time: #{batch_time / 1000} ms (#{batch_time / word_count} μs per word)"
+      )
+
       IO.puts("Autocomplete time (#{length(elem(results, 1))} results): #{autocomplete_time} μs")
       IO.puts("Lookup time: #{lookup_time} μs")
       IO.puts("==========================================\n")
@@ -56,27 +68,32 @@ defmodule TrieHard.BenchmarkTest do
 
       # Insert many words with shared prefixes
       prefixes = ["application", "appreciate", "approach", "appropriate"]
-      words = for prefix <- prefixes,
-                  suffix <- 1..1000,
-                  do: "#{prefix}_#{suffix}"
 
-      {time, _} = :timer.tc(fn ->
-        TrieHard.add_word_list(trie, words)
-      end)
+      words =
+        for prefix <- prefixes,
+            suffix <- 1..1000,
+            do: "#{prefix}_#{suffix}"
+
+      {time, _} =
+        :timer.tc(fn ->
+          TrieHard.add_word_list(trie, words)
+        end)
 
       # Test prefix search performance
-      {prefix_time, {_, found}} = :timer.tc(fn ->
-        TrieHard.prefix_search(trie, "app")
-      end)
+      {prefix_time, {_, found}} =
+        :timer.tc(fn ->
+          TrieHard.prefix_search(trie, "app")
+        end)
 
       # Test autocomplete performance
-      {complete_time, {_, results}} = :timer.tc(fn ->
-        TrieHard.auto_complete(trie, "application", 50)
-      end)
+      {complete_time, {_, results}} =
+        :timer.tc(fn ->
+          TrieHard.auto_complete(trie, "application", 50)
+        end)
 
       IO.puts("\n=== Memory Efficiency Test ===")
       IO.puts("Words with shared prefixes: #{length(words)}")
-      IO.puts("Insert time: #{time/1000} ms")
+      IO.puts("Insert time: #{time / 1000} ms")
       IO.puts("Prefix search time: #{prefix_time} μs (found: #{found})")
       IO.puts("Autocomplete time: #{complete_time} μs (#{length(results)} results)")
       IO.puts("===============================\n")

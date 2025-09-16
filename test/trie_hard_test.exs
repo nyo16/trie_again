@@ -73,7 +73,8 @@ defmodule TrieHardTest do
 
       # Results should contain words starting with "ca"
       assert is_list(results)
-      assert length(results) >= 3  # at least "car", "card", "care", "cat"
+      # at least "car", "card", "care", "cat"
+      assert length(results) >= 3
 
       # All results should start with "ca"
       Enum.each(results, fn word ->
@@ -97,10 +98,14 @@ defmodule TrieHardTest do
     end
 
     test "count_prefix returns correct counts", %{trie: trie} do
-      assert TrieHard.count_prefix(trie, "ca") == {:ok, 4}  # car, card, care, cat
-      assert TrieHard.count_prefix(trie, "car") == {:ok, 3} # car, card, care
-      assert TrieHard.count_prefix(trie, "do") == {:ok, 1}  # dog
-      assert TrieHard.count_prefix(trie, "xyz") == {:ok, 0} # none
+      # car, card, care, cat
+      assert TrieHard.count_prefix(trie, "ca") == {:ok, 4}
+      # car, card, care
+      assert TrieHard.count_prefix(trie, "car") == {:ok, 3}
+      # dog
+      assert TrieHard.count_prefix(trie, "do") == {:ok, 1}
+      # none
+      assert TrieHard.count_prefix(trie, "xyz") == {:ok, 0}
     end
   end
 
@@ -130,10 +135,12 @@ defmodule TrieHardTest do
       assert TrieHard.add_word_list(trie, words) == :ok
 
       {:ok, results} = TrieHard.auto_complete(trie, "app", 10)
-      assert length(results) == 3  # apple, application, apply
+      # apple, application, apply
+      assert length(results) == 3
 
       {:ok, results} = TrieHard.auto_complete(trie, "ban", 10)
-      assert length(results) == 2  # banana, band
+      # banana, band
+      assert length(results) == 2
     end
   end
 
@@ -215,12 +222,13 @@ defmodule TrieHardTest do
       TrieHard.insert(trie, "shared", "data")
 
       # Spawn multiple processes to access the trie
-      tasks = for i <- 1..10 do
-        Task.async(fn ->
-          TrieHard.insert(trie, "process#{i}", "data#{i}")
-          TrieHard.get(trie, "shared")
-        end)
-      end
+      tasks =
+        for i <- 1..10 do
+          Task.async(fn ->
+            TrieHard.insert(trie, "process#{i}", "data#{i}")
+            TrieHard.get(trie, "shared")
+          end)
+        end
 
       # Wait for all tasks and collect results
       results = Task.await_many(tasks)
