@@ -36,7 +36,7 @@ defmodule TrieHard.MixProject do
   defp description do
     """
     A blazing fast, memory-efficient Trie (prefix tree) implementation for Elixir
-    with autocomplete support, powered by the high-performance trie_hard_rs Rust library.
+    with autocomplete support, powered by a high-performance Rust NIF.
     """
   end
 
