@@ -24,3 +24,4 @@ trie_again-*.tar
 
 # Rust binary artifacts
 /target/
+native/**/target/
