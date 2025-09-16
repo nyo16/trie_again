@@ -9,4 +9,3 @@ crate-type = ["cdylib"]
 
 [dependencies]
 rustler = "0.37.0"
-trie_hard_rs = "0.1.0"

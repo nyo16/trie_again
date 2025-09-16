@@ -1,6 +1,8 @@
 use rustler::{Atom, Env, ResourceArc, Term};
 use std::sync::Mutex;
-use trie_hard_rs::Trie;
+
+mod trie;
+use trie::Trie;
 
 mod atoms {
     rustler::atoms! {

@@ -33,15 +33,11 @@ jobs:
       matrix:
         nif: ["2.15"]
         job:
-          - { target: arm-unknown-linux-gnueabihf , os: ubuntu-22.04 , use-cross: true }
           - { target: aarch64-unknown-linux-gnu   , os: ubuntu-22.04 , use-cross: true }
-          - { target: aarch64-unknown-linux-musl  , os: ubuntu-22.04 , use-cross: true }
           - { target: aarch64-apple-darwin        , os: macos-13      }
-          - { target: riscv64gc-unknown-linux-gnu , os: ubuntu-22.04 , use-cross: true }
           - { target: x86_64-apple-darwin         , os: macos-13      }
           - { target: x86_64-unknown-linux-gnu    , os: ubuntu-22.04  }
           - { target: x86_64-unknown-linux-musl   , os: ubuntu-22.04 , use-cross: true }
-          - { target: x86_64-pc-windows-gnu       , os: windows-2022  }
           - { target: x86_64-pc-windows-msvc      , os: windows-2022  }
 
     steps:
@@ -52,13 +48,23 @@ jobs:
       shell: bash
       run: |
         # Get the version from mix.exs
-        VERSION=$(grep 'version:' mix.exs | head -n 1 | sed 's/.*version: "\(.*\)".*/\1/')
+        VERSION=$(grep '@version' mix.exs | head -n 1 | sed 's/.*@version "\(.*\)".*/\1/')
         echo "PROJECT_VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Install Elixir and Erlang
+      uses: erlef/setup-beam@v1
+      with:
+        version-type: strict
+        otp-version: 26.2
+        elixir-version: 1.18.4
 
     - name: Install Rust toolchain
       uses: dtolnay/rust-toolchain@stable
       with:
         target: ${{ matrix.job.target }}
+
+    - name: Install dependencies
+      run: mix deps.get
 
     - name: Build the project
       id: build-crate

@@ -104,14 +104,7 @@ name = "trie_hard_native"
 version = "0.1.0"
 dependencies = [
  "rustler",
- "trie_hard_rs",
 ]
-
-[[package]]
-name = "trie_hard_rs"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23e2b07ec8868f9a69d5028fafaade30bbe6ff2ee8348c004d85966737d9fe9d"
 
 [[package]]
 name = "unicode-ident"
